@@ -114,11 +114,20 @@ class Proc
      * @param $command
      * @return array
      */
-    public function sendCommand($command)
+    public function sendRRDCommand($command)
     {
         $this->sendInput($this->checkAddEOL($command));
 
-        return $this->getOutput();
+        // RRD specific
+
+        $output = $this->getOutput();
+        while ($output[1] == "" && !preg_match('/^(?:OK |ERROR:)/m', $output[0])) {
+            $append = $this->getOutput();
+            $output[0] .= $append[0];
+            $output[1] .= $append[1];
+        }
+
+        return $output;
     }
 
     /**

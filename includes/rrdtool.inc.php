@@ -105,7 +105,7 @@ function rrdtool_graph($graph_file, $options)
     if (rrdtool_initialize(false)) {
         $cmd = rrdtool_build_command('graph', $graph_file, $options);
 
-        $output = implode($rrd_sync_process->sendCommand($cmd));
+        $output = implode($rrd_sync_process->sendRRDCommand($cmd));
 
         if ($debug) {
             echo "<p>$cmd</p>";
@@ -157,10 +157,10 @@ function rrdtool($command, $filename, $options)
     // send the command!
     if ($command == 'last' && rrdtool_initialize(false)) {
         // send this to our synchronous process so output is guaranteed
-        $output = $rrd_sync_process->sendCommand($cmd);
+        $output = $rrd_sync_process->sendRRDCommand($cmd);
     } elseif (rrdtool_initialize()) {
         // don't care about the return of other commands, so send them to the faster async process
-        $output = $rrd_async_process->sendCommand($cmd);
+        $output = $rrd_async_process->sendRRDCommand($cmd);
     } else {
         throw new Exception('rrdtool could not start');
     }
