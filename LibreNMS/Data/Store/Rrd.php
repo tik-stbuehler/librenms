@@ -357,10 +357,10 @@ class Rrd extends BaseDatastore
         // send the command!
         if ($command == 'last' && $this->init(false)) {
             // send this to our synchronous process so output is guaranteed
-            $output = $this->sync_process->sendCommand($cmd);
+            $output = $this->sync_process->sendRRDCommand($cmd);
         } elseif ($this->init()) {
             // don't care about the return of other commands, so send them to the faster async process
-            $output = $this->async_process->sendCommand($cmd);
+            $output = $this->async_process->sendRRDCommand($cmd);
         } else {
             Log::error('rrdtool could not start');
         }
@@ -446,7 +446,7 @@ class Rrd extends BaseDatastore
         if ($this->init(false)) {
             $cmd = $this->buildCommand('graph', $graph_file, $options);
 
-            $output = implode($this->sync_process->sendCommand($cmd));
+            $output = implode($this->sync_process->sendRRDCommand($cmd));
 
             d_echo("<p>$cmd</p>\n<p>command returned ($output)</p>");
 
